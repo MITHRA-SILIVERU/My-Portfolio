@@ -15,7 +15,6 @@ A modern, responsive portfolio website built with React.js, showcasing my projec
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
 - [Installation](#installation)
-- [Project Structure](#project-structure)
 - [Deployment](#deployment)
 - [Contact](#contact)
 
@@ -88,13 +87,14 @@ This portfolio website serves as a comprehensive showcase of my professional wor
    
 3. **Install Dependencies**
     npm install
+    
    
-4. **Install Backend Dependencies (for contact form)**
+5. **Install Backend Dependencies (for contact form)**
    cd src/server
    npm install
-   cd ../..
+
    
-5. **Start Local Development**
+6. **Start Local Development**
 - Frontend:  
   ```
   npm start
@@ -107,43 +107,6 @@ This portfolio website serves as a comprehensive showcase of my professional wor
 
 ---
 
-## 📁 Project Structure
-
-personal-portfolio/
-├── public/
-├── src/
-│ ├── assets/
-│ │ ├── font/
-│ │ ├── img/
-│ │ └── tech_logo/
-│ ├── components/
-│ │ ├── Banner.js
-│ │ ├── Career.js
-│ │ ├── Contact.js
-│ │ ├── Expcard.js
-│ │ ├── Footer.js
-│ │ ├── NavBar.js
-│ │ ├── ProjectCard.js
-│ │ ├── Skills.css
-│ │ └── Skills.jsx
-│ ├── server/
-│ │ ├── server.js
-│ │ ├── package.json
-│ │ └── node_modules/
-│ ├── App.css
-│ ├── App.js
-│ ├── App.test.js
-│ ├── constants.js
-│ ├── index.css
-│ ├── index.js
-│ └── logo.svg
-├── .gitignore
-├── package.json
-├── README.md
-└── LICENSE
-
-
----
 
 ## 🌐 Deployment
 
