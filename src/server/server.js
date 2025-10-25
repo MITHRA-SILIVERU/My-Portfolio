@@ -1,4 +1,6 @@
 const express = require("express");
+const bodyParser = require('body-parser');
+const path = require('path');
 const router = express.Router();
 const cors = require("cors");
 const nodemailer = require("nodemailer");
@@ -6,10 +8,39 @@ require("dotenv").config(); // Add dotenv package
 
 const app = express();
 
+
+
 // Middleware
 app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/", router);
+
+
+// Your contact form API endpoint
+app.post('/api/contact', (req, res) => {
+  // Your existing contact form logic here
+  const { name, email, message } = req.body;
+  
+  // Your email sending logic
+  console.log('Contact form submitted:', { name, email, message });
+  
+  res.status(200).json({ message: 'Message sent successfully!' });
+});
+
+
+// Serve React build files in production
+if (process.env.NODE_ENV === 'production') {
+  // Serve static files from React build folder
+  app.use(express.static(path.join(__dirname, '../../build')));
+  
+  // Handle React routing, return all requests to React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../build', 'index.html'));
+  });
+}
+
 
 // Environment variable check
 if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
