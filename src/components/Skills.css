@@ -1,0 +1,172 @@
+/* Skills Section */
+.skills {
+  padding: 80px 0;
+  background-color: #0a0a0a;
+  position: relative;
+}
+
+.skills-bx {
+  background: #151515;
+  border-radius: 42px;
+  padding: 60px 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.skills h2 {
+  font-size: 45px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 16px;
+  text-align: center;
+  letter-spacing: 0.8px;
+}
+
+.skills p {
+  color: #b8b8b8;
+  font-size: 18px;
+  line-height: 1.6;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* Filter Buttons */
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 50px;
+}
+
+.filter-btn {
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.filter-btn.active {
+  background: linear-gradient(90.21deg, #351fb4 -5.91%, #00BFFF 111.58%);
+  color: #ffffff;
+  border-color: rgba(61, 66, 226, 0.5);
+  box-shadow: 0 0 20px rgba(61, 66, 226, 0.5);
+}
+
+.filter-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(61, 66, 226, 0.5);
+}
+
+/* Skills Grid */
+.skills-row {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.skill-col {
+  margin-bottom: 10px;
+  display: flex;
+}
+
+/* Skill Cards */
+.skill-card {
+  background-color: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 20px 20px 10px 20px ;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  cursor: default;
+}
+
+.skill-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 30px rgba(75, 168, 215, 0.5);
+  border-color: rgba(75, 168, 215, 0.5);
+  background-color: #1f1f1f;
+}
+
+.skill-card h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.skill-card p {
+  font-size: 16px;
+  color: #b8b8b8;
+  line-height: 1.6;
+  margin: 0;
+  text-align: left;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .skills-bx {
+    padding: 40px 30px;
+  }
+
+  .skills h2 {
+    font-size: 35px;
+  }
+
+  .skills p {
+    font-size: 16px;
+  }
+
+  .filter-buttons {
+    gap: 8px;
+  }
+
+  .filter-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .skill-card {
+    padding: 24px 20px;
+  }
+
+  .skill-card h3 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .skills {
+    padding: 50px 0;
+  }
+
+  .skills-bx {
+    padding: 30px 20px;
+  }
+
+  .filter-buttons {
+    gap: 6px;
+  }
+
+  .filter-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
