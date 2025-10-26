@@ -21,7 +21,7 @@ if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
 // Create email transporter (only if credentials exist)
 let contactEmail;
 if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-const contactEmail = nodemailer.createTransport({
+contactEmail = nodemailer.createTransport({
   service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER,
@@ -83,6 +83,7 @@ app.post("/api/contact", (req, res) => {
       `,
       replyTo: email, // Allow replying directly to the sender
     };
+console.log("📤 Sending email via:", process.env.EMAIL_USER);
 
     contactEmail.sendMail(mail, (error) => {
       if (error) {
