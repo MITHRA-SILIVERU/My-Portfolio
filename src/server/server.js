@@ -65,7 +65,7 @@ app.post("/api/contact", (req, res) => {
   // If email service is configured, send email
   if (contactEmail) {
     const mail = {
-      from: process.env.EMAIL_USER,
+      from: process.env.EMAIL_SENDER_USER,
       to: process.env.EMAIL_USER, // Send to yourself
       subject: `Portfolio Contact from ${fullName}`,
       html: `
