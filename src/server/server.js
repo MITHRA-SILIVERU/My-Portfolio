@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require("cors");
-const brevo = require('@getbrevo/brevo');
+const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const app = express();
@@ -13,21 +13,39 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Initialize Brevo API
-let apiInstance = null;
-if (process.env.BREVO_API_KEY) {
-  apiInstance = new brevo.TransactionalEmailsApi();
-  apiInstance.setApiKey(
-    brevo.TransactionalEmailsApiApiKeys.apiKey, 
-    process.env.BREVO_API_KEY
-  );
-  console.log("✅ Brevo API initialized successfully");
-} else {
-  console.warn("⚠️  Warning: BREVO_API_KEY not set. Email functionality will not work.");
+// Environment variable check (optional for development)
+if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+  console.warn("⚠️  Warning: EMAIL_USER and EMAIL_PASS not set. Email functionality will not work.");
+}
+
+// Create email transporter (only if credentials exist)
+let contactEmail;
+if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+const contactEmail = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,
+  port: parseInt(process.env.EMAIL_PORT), // 465
+  secure: true, // true for port 465, false for 587
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS, // Use Gmail App Password
+    },
+   tls: {
+    rejectUnauthorized: false // Helps with some hosting providers
+  }
+  });
+
+  // Verify email configuration
+  contactEmail.verify((error) => {
+  if (error) {
+    console.log("❌ SMTP Connection Failed:", error);
+  } else {
+    console.log("✅ SMTP Ready to Send Emails");
+  }
+});
 }
 
 // Contact form endpoint
-app.post("/api/contact", async (req, res) => {
+app.post("/api/contact", (req, res) => {
   const { firstName, lastName, email, phone, message } = req.body;
 
   // Combine first and last name
@@ -49,53 +67,42 @@ app.post("/api/contact", async (req, res) => {
     });
   }
 
-  // If Brevo API is configured, send email
-  if (apiInstance) {
-    let sendSmtpEmail = new brevo.SendSmtpEmail();
-    
-    sendSmtpEmail.subject = `Portfolio Contact from ${fullName}`;
-    sendSmtpEmail.htmlContent = `
-      <div style="font-family: Arial, sans-serif; padding: 20px;">
-        <h2 style="color: #333;">New Contact Form Submission</h2>
-        <hr>
-        <p><strong>Name:</strong> ${fullName}</p>
-        <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-        <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
-        <hr>
-        <h3>Message:</h3>
-        <p style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${message}</p>
-      </div>
-    `;
-    
-    sendSmtpEmail.sender = { 
-      name: "Portfolio Contact Form", 
-      email: "9a165e001@smtp-brevo.com" 
-    };
-    
-    sendSmtpEmail.to = [{ 
-      email: process.env.YOUR_EMAIL, 
-      name: "Portfolio Owner" 
-    }];
-    
-    sendSmtpEmail.replyTo = { 
-      email: email, 
-      name: fullName 
+  // If email service is configured, send email
+  if (contactEmail) {
+    const mail = {
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER, // Send to yourself
+      subject: `Portfolio Contact from ${fullName}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+          <h2 style="color: #333;">New Contact Form Submission</h2>
+          <hr>
+          <p><strong>Name:</strong> ${fullName}</p>
+          <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+          <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
+          <hr>
+          <h3>Message:</h3>
+          <p style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${message}</p>
+        </div>
+      `,
+      replyTo: email, // Allow replying directly to the sender
     };
 
-    try {
-      const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
-      console.log("✅ Email sent successfully:", data);
-      return res.json({ 
-        code: 200, 
-        message: "Message sent successfully!" 
-      });
-    } catch (error) {
-      console.error("❌ Email send failed:", error);
-      return res.status(500).json({ 
-        code: 500, 
-        message: "Failed to send message. Please try again." 
-      });
-    }
+    contactEmail.sendMail(mail, (error) => {
+      if (error) {
+        console.error("❌ Error sending email:", error);
+        return res.status(500).json({ 
+          code: 500, 
+          message: "Failed to send message. Please try again." 
+        });
+      } else {
+        console.log("✅ Email sent successfully!");
+        return res.json({ 
+          code: 200, 
+          message: "Message sent successfully!" 
+        });
+      }
+    });
   } else {
     // If no email configured, just log and return success
     console.log("📝 Email not configured. Form data logged above.");
