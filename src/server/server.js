@@ -21,10 +21,10 @@ if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
 // Create email transporter (only if credentials exist)
 let contactEmail;
 if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-  contactEmail = nodemailer.createTransport({
-    host:"smtp.gmail.com",
-    port : 465,
-    secure: true,
+const contactEmail = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
+  secure: false, // use false for port 587
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS, // Use Gmail App Password
@@ -33,12 +33,12 @@ if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
 
   // Verify email configuration
   contactEmail.verify((error) => {
-    if (error) {
-      console.error("❌ Email configuration error:", error);
-    } else {
-      console.log("✅ Email service is ready to send messages");
-    }
-  });
+  if (error) {
+    console.log("❌ SMTP Connection Failed:", error);
+  } else {
+    console.log("✅ SMTP Ready to Send Emails");
+  }
+});
 }
 
 // Contact form endpoint
