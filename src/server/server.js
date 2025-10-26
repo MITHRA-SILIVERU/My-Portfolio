@@ -21,23 +21,22 @@ if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
 // Create email transporter (only if credentials exist)
 let contactEmail;
 if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-contactEmail = nodemailer.createTransport({
-  service: 'gmail',
+  contactEmail = nodemailer.createTransport({
+    service: "gmail",
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS, // Use Gmail App Password
     },
- 
   });
 
   // Verify email configuration
   contactEmail.verify((error) => {
-  if (error) {
-    console.log("❌ SMTP Connection Failed:", error);
-  } else {
-    console.log("✅ SMTP Ready to Send Emails");
-  }
-});
+    if (error) {
+      console.error("❌ Email configuration error:", error);
+    } else {
+      console.log("✅ Email service is ready to send messages");
+    }
+  });
 }
 
 // Contact form endpoint
@@ -83,7 +82,6 @@ app.post("/api/contact", (req, res) => {
       `,
       replyTo: email, // Allow replying directly to the sender
     };
-console.log("📤 Sending email via:", process.env.EMAIL_USER);
 
     contactEmail.sendMail(mail, (error) => {
       if (error) {
@@ -127,3 +125,4 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
+
