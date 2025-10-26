@@ -111,11 +111,11 @@ app.post("/api/contact", (req, res) => {
 // Serve React build files in production
 if (process.env.NODE_ENV === 'production') {
   // Serve static files from React build folder
-  app.use(express.static(path.join(__dirname, '../../build')));
+  app.use(express.static(path.join(__dirname, '../src/build')));
   
   // Handle React routing - return all requests to React app
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../build', 'index.html'));
+    res.sendFile(path.join(__dirname, '../src/build', 'index.html'));
   });
 }
 
