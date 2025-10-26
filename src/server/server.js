@@ -23,12 +23,15 @@ let contactEmail;
 if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
 const contactEmail = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: false, // use false for port 587
+  port: parseInt(process.env.EMAIL_PORT), // 465
+  secure: true, // true for port 465, false for 587
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS, // Use Gmail App Password
     },
+   tls: {
+    rejectUnauthorized: false // Helps with some hosting providers
+  }
   });
 
   // Verify email configuration
